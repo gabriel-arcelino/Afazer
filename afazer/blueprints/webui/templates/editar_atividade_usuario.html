@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<form method="post" action="/usuario/">
+<form method="post">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -45,7 +45,7 @@
                 <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
                     Cancelar
                 </button>
-                <button class="btn btn-primary btn-sm" name="id" value="{{id}}"> Confirmar
+                <button type="submit" class="btn btn-primary btn-sm" > Confirmar
                 </button>
 
             </div>
