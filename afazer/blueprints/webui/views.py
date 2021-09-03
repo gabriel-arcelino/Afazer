@@ -13,6 +13,8 @@ def login():
         usuario = Usuario.query.filter_by(login=email).first()
         if usuario is not None and check_password_hash(usuario.senha, senha):
             login_user(usuario, remember=remember)
+            if current_user.tipo_usuario == "gestor":
+                return redirect(url_for('webui.menu_gestorview'))
             return redirect(url_for('webui.menu_usuarioview'))
         flash("Email ou senha incorretos, tente novemente.")
         return render_template('loginUser.html')
@@ -28,14 +30,56 @@ def sair():
 
 @login_required
 def visualizar_menu_gestor():
-    return render_template('gestor.html')
+    if request.method == 'POST':
+        pass
+    atividades = Atividade.query.all()
+    print(atividades)
+    return render_template('atividades.html', atividades=atividades)
 
 
 @login_required
-def listar_atividades():
-    atividades = Atividade.query.all()
-    # response = [{'id': i.id, 'nome': i.nome, 'pessoa': i.pessoa.nome} for i in atividades]
-    return render_template('atividades.html', atividades=atividades)
+def editar_atividade(id):
+    if current_user.tipo_usuario =="gestor":
+        if request.method == 'POST':
+            nome = request.form.get('nome', type=str)
+            responsavel = request.form.get('responsavel', type=str)
+            atividade = Atividade.query.filter_by(id=id).first()
+            atividade.nome = nome
+            pessoa = Pessoa.query.filter_by(nome=responsavel).first()
+            atividade.pessoa = pessoa
+            atividade.save()
+            return visualizar_menu_gestor()
+        usuarios = Usuario.query.filter_by(tipo_usuario="usuario")
+        return render_template('editar_atividade_gestor.html', usuarios=usuarios)
+
+    if request.method == 'POST':
+        status = request.form.get('status', type=str)
+        print(id, status)
+        atividade = Atividade.query.filter_by(id=id).first()
+        atividade.status = status
+        atividade.save()
+        flash("Atividade editada com sucesso.")
+        return visualizar_menu_usuario()
+    print("'editar_atividade_usuario.html'", id)
+    return render_template('editar_atividade_usuario.html')
+
+
+def excluir_atividade(id):
+    atividade=Atividade.query.filter_by(id=id).first()
+    atividade.delete()
+    return redirect(url_for('webui.menu_gestorview'))
+
+
+def criar_atividade():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        responsavel = request.form.get('responsavel')
+        pessoa=Pessoa.query.filter_by(nome=responsavel).first()
+        atividade=Atividade(nome=nome,pessoa=pessoa,status="Por Fazer")
+        atividade.save()
+        return redirect(url_for('webui.menu_gestorview'))
+    usuarios=Usuario.query.filter_by(tipo_usuario="usuario").all()
+    return render_template('criar_atividade.html', usuarios=usuarios)
 
 
 @login_required
@@ -47,7 +91,6 @@ def gerenciar_atividades():
 def visualizar_menu_usuario():
     atividades = Atividade.query.filter_by(pessoa_id=current_user.pessoa_id)
     return render_template('atividades.html', atividades=atividades)
-
 
 def post():
     dados = request.json
