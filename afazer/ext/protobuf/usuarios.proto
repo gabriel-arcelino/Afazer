@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+enum Coluna {
+    ID = 0;
+    NOME = 1;
+    LOGIN = 2;
+    SENHA = 3;
+    TIPO_USUARIO = 4;
+
+}
+message Requisicao {
+    Coluna coluna = 1;
+    string valor = 2;
+}
+
+message User {
+    int32 id = 1;
+    string nome = 2;
+    string login = 3;
+    string senha = 4;
+    string tipo_usuario = 5;
+
+}
+
+message Resposta {
+    repeated User usuarios = 1;
+}
+
+service Usuarios {
+    rpc RetornarUsuarios (Requisicao) returns (Resposta);
+}
