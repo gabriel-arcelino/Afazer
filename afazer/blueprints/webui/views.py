@@ -2,6 +2,15 @@ from flask import request, render_template, redirect, url_for, flash
 from werkzeug.security import check_password_hash
 from afazer.models import Pessoa, Atividade, Usuario
 from flask_login import login_user, login_required, logout_user, current_user
+import grpc
+from afazer.ext.Usuario.usuarios_pb2_grpc import UsuariosStub
+from afazer.ext.Usuario.usuarios_pb2 import Coluna, Requisicao
+
+def conectarServidor(requisicao):
+    canal = grpc.insecure_channel("localhost:50051")
+    cliente = UsuariosStub(canal)
+    return cliente.RetornarUsuarios()
+
 
 
 def login():
