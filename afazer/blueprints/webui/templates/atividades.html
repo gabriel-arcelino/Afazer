@@ -55,7 +55,7 @@
 
                 {% if current_user.tipo_usuario=="gestor" %}
 
-                <td>{{atividade["pessoa"].nome}}</td>
+                <td>{{atividade["responsavel"]}}</td>
 
                 <td>
                     <a class="icon" href="{{url_for('webui.editar_atividade_gestorview',id=atividade.id)}}"

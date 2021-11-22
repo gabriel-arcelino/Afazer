@@ -1,7 +1,7 @@
 from flask_simplelogin import SimpleLogin
 from werkzeug.security import check_password_hash, generate_password_hash
-from afazer.ext.db import db
-from afazer.models import Usuario
+from afazer.Admin.ext.db import db
+from afazer.Admin.models import Usuario
 
 
 def verify_login(user):

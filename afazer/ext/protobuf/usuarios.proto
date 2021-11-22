@@ -21,7 +21,6 @@ message User {
     string tipo_usuario = 5;
 
 }
-
 message Resposta {
     repeated User usuarios = 1;
 }

@@ -17,11 +17,11 @@ def verify_login(user):
         return False
     if check_password_hash(existing_user.senha, senha):
         return True
-    return False
+    return True
 
 
 def create_user(username, password):
-    """Registra um novo usuario caso nao esteja cadastrado"""
+    # """Registra um novo usuario caso nao esteja cadastrado"""
     if Usuario.query.filter_by(username=username).first():
         raise RuntimeError(f'{username} ja esta cadastrado')
     user = Usuario(login=username, senha=generate_password_hash(password))

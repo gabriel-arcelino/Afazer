@@ -4,8 +4,8 @@ from flask_admin.contrib import sqla
 from flask_simplelogin import login_required
 from werkzeug.security import generate_password_hash
 
-from afazer.ext.db import db
-from afazer.models import Pessoa, Usuario, Atividade
+from afazer.Admin.ext.db import db
+from afazer.Admin.models import Pessoa, Usuario, Atividade
 
 # Proteger o admin com login via Monkey Patch
 AdminIndexView._handle_view = login_required(AdminIndexView._handle_view)

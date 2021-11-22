@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from afazer.ext.db import db, Base
+from afazer.Admin.ext.db import db, Base
 from flask_login import UserMixin
 
 

@@ -17,8 +17,7 @@ class Atividade(Base):
     __tablename__ = 'atividade'
     id = Column(Integer, primary_key=True)
     nome = Column(String(80), index=True)
-    pessoa_id = Column(Integer, ForeignKey('pessoa.id'))
-    pessoa = relationship("Pessoa")
+    responsavel = Column(String(80))
     status = Column(String(80))
 
     def __repr__(self):
