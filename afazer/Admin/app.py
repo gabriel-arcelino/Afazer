@@ -4,6 +4,8 @@ from afazer.Admin.ext import auth
 from flask import Flask
 from afazer.Admin.models import Usuario, Pessoa
 from concurrent import futures
+from threading import Thread
+from multiprocessing import Process
 import grpc
 
 from afazer.ext.Usuario.usuarios_pb2 import Coluna, Resposta, User
@@ -67,6 +69,10 @@ auth.init_app(app)
 
 
 if __name__ == '__main__':
-    #app.run(port=5001, debug=True)
+    # app.run(port=5001, debug=True)
     iniciarServidor()
+    print("teste")
+    # i = Process(target=iniciarServidor, args=None)
+    # i.start()
+    # i.join()
     #ssl_context='adhoc',
