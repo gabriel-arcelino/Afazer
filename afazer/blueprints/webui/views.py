@@ -1,11 +1,11 @@
 from flask import request, render_template, redirect, url_for, flash
 from werkzeug.security import check_password_hash
-from afazer.models import Atividade, Usuario, Pessoa
+from afazer.models import Atividade, Usuario
 from flask_login import login_user, login_required, logout_user, current_user
 from afazer.ext.grpc import conectar
 # import grpc
 # from afazer.ext.Usuario.usuarios_pb2_grpc import UsuariosStub
-from afazer.ext.Usuario.usuarios_pb2 import Coluna, Requisicao
+from Usuario.usuarios_pb2 import Coluna, Requisicao
 
 
 # canal = grpc.insecure_channel('localhost:50051')
@@ -18,12 +18,12 @@ def login():
         email = request.form['email']
         senha = request.form.get('senha')
         remember = True if request.form.get('remember') else False
-        usuario = Usuario.query.filter_by(login=email).first()
-        # usuario = cliente.RetornarUsuarios(Requisicao(coluna=Coluna.LOGIN, valor=email))
-        # resposta = Usuario.query.filter_by(login=email).first()
-
+        usuario = (cliente.RetornarUsuarios(Requisicao(coluna=Coluna.LOGIN, valor=email))).usuarios[0]
+        usuario = Usuario(id=usuario.id, nome=usuario.nome, login=usuario.login, senha=usuario.senha, tipo_usuario=usuario.tipo_usuario)
+        print("TESTE", usuario.id)
         if usuario is not None and check_password_hash(usuario.senha, senha):
             login_user(usuario, remember=remember)
+            print("autenticado")
             if current_user.tipo_usuario == "gestor":
                 return redirect(url_for('webui.menu_gestorview'))
             return redirect(url_for('webui.menu_usuarioview'))
@@ -41,11 +41,11 @@ def sair():
 
 @login_required
 def visualizar_menu_gestor():
-    if request.method == 'POST':
-        pass
-    atividades = Atividade.query.all()
-    print(atividades)
-    return render_template('atividades.html', atividades=atividades)
+    if current_user.tipo_usuario == 'gestor':
+        atividades = Atividade.query.all()
+        print(atividades)
+        return render_template('atividades.html', atividades=atividades)
+    return "Não é um gestor do desse sistema"
 
 
 @login_required
@@ -61,7 +61,6 @@ def editar_atividade(id):
             atividade.save()
             return visualizar_menu_gestor()
         # usuarios = Usuario.query.filter_by(tipo_usuario="usuario")
-        usuarios = [{'nome':"Pedro"}, {'nome':"Alexa"}]
         resposta = cliente.RetornarUsuarios(Requisicao(coluna=Coluna.TIPO_USUARIO, valor="usuario"))
         return render_template('editar_atividade_gestor.html', usuarios=resposta.usuarios)
 
@@ -103,7 +102,8 @@ def gerenciar_atividades():
 
 @login_required
 def visualizar_menu_usuario():
-    atividades = Atividade.query.filter_by(responsavel=current_user.pessoa.nome)
-    return render_template('atividades.html', atividades=atividades)
+    if current_user.tipo_usuario == 'usuario':
+        atividades = Atividade.query.filter_by(responsavel=current_user.nome)
+        return render_template('atividades.html', atividades=atividades)
 
 

@@ -1,9 +1,10 @@
-import grpc
-from afazer.ext.Usuario.usuarios_pb2_grpc import UsuariosStub
-from afazer.ext.Usuario.usuarios_pb2 import Coluna, Requisicao
+import grpc,os
+from Usuario.usuarios_pb2_grpc import UsuariosStub
+# from afazer.ext.Usuario.usuarios_pb2 import Coluna, Requisicao
 
 
 def conectar():
-    canal = grpc.insecure_channel('localhost:50051')
+    afazer_host = os.getenv("AFAZER_HOST", "localhost")
+    canal = grpc.insecure_channel(f"{afazer_host}:50051")
     cliente = UsuariosStub(canal)
     return cliente

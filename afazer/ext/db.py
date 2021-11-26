@@ -3,8 +3,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from flask_sqlalchemy import SQLAlchemy
 
+import os
 
-engine = create_engine('sqlite:///atividades.db', convert_unicode=True)
+engine = create_engine('sqlite:////'+os.path.dirname(os.path.abspath(__file__))+'/atividades.db', convert_unicode=True)
 db = scoped_session(sessionmaker(autocommit=False, bind=engine))
 
 Base = declarative_base()
