@@ -23,25 +23,6 @@ webui.iniciar_app(app)
 autenticacao.iniciar_app(app)
 
 
-# login_manager = LoginManager()
-# login_manager.login_view = 'webui.login'
-# login_manager.init_app(app)
-#
-# @login_manager.user_loader
-# def load_user(user_id):
-#     #since the user_id is just the primary key of our user table, use it in the query for the user
-#     print("Id: ", user_id)
-#     cliente = conectar()
-#     (cliente.RetornarUsuarios(Requisicao(coluna=Coluna.LOGIN, valor=email))).usuarios[0]
-#     return Usuario.query.get(int(user_id)
-
-# @auth.verify_password
-# def verificacao(login, senha):
-#     if not (login, senha):
-#         return False
-#     return Usuario.query.filter_by(login=login, senha=senha).first()
-
-
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', ssl_context='adhoc')
     #ssl_context='adhoc',
