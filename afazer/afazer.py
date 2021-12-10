@@ -24,5 +24,6 @@ autenticacao.iniciar_app(app)
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', ssl_context='adhoc')
+    app.run(ssl_context= 'adhoc')
+    # debug = True, host = '0.0.0.0', ssl_context = 'adhoc'
     #ssl_context='adhoc',
