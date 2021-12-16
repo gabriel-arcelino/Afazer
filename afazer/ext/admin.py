@@ -26,5 +26,5 @@ def iniciar_app(app):
     admin.template_mode = "bootstrap3"
     admin.init_app(app)
     admin.add_view(sqla.ModelView(Atividade, db))
-    admin.add_view(sqla.ModelView(Pessoa, db))
+    # admin.add_view(sqla.ModelView(Pessoa, db))
     admin.add_view(UserAdmin(Usuario, db))

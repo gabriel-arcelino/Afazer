@@ -1,25 +1,39 @@
 version: "3.9"
 services:
 
+    database:
+        container_name: usuarios
+        image: "postgres:latest"
+        env_file: database.conf
+        ports:
+            - "5432:5432"
+        networks:
+            microservices:
+        volumes:
+            - db_volume:/var/lib/postgresql
     admin:
         build:
             context: .
             dockerfile: Admin/Dockerfile
         image: "admin"
+        env_file: database.conf
         networks:
             - microservices
 
-    afazer:
-        build:
-            context: .
-            dockerfile: afazer/Dockerfile
-        environment:
-            ADMIN_HOST: admin
-        image: "afazer"
-        networks:
-            - microservices
-        ports:
-            - "5000:5000"
+volumes:
+    db_volume:
+
+#    afazer:
+#        build:
+#            context: .
+#            dockerfile: afazer/Dockerfile
+#        environment:
+#            ADMIN_HOST: admin
+#        image: "afazer"
+#        networks:
+#            - microservices
+#        ports:
+#            - "5000:5000"
 
 networks:
     microservices:

@@ -8,17 +8,11 @@ from Usuario import usuarios_pb2_grpc
 
 def iniciarServidor():
     print("Iniciar server")
-    with open(os.path.dirname(os.path.abspath(__file__))+'/server.key', 'rb') as f:
-        chave_privada = f.read()
-    with open(os.path.dirname(os.path.abspath(__file__))+'/server.crt', 'rb') as f:
-        certificate_chain = f.read()
-    credenciais_server = grpc.ssl_server_credentials(((chave_privada, certificate_chain,),))
-
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     usuarios_pb2_grpc.add_UsuariosServicer_to_server(
         UsuarioServe(), server
     )
-    server.add_secure_port('[::]:50051', credenciais_server)
+    server.add_insecure_port('[::]:50051')
     server.start()
     server.wait_for_termination()
 

@@ -1,22 +1,8 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 from flask_sqlalchemy import SQLAlchemy
 
-import os
-
-engine = create_engine('sqlite:////'+os.path.dirname(os.path.abspath(__file__))+'/usuarios.db', convert_unicode=True)
-db = scoped_session(sessionmaker(autocommit=False, bind=engine))
-
-Base = declarative_base()
-Base.query = db.query_property()
-
-
-def init_db():
-    Base.metadata.create_all(bind=engine)
+db = SQLAlchemy()
 
 
 def iniciar_app(app):
-    d = SQLAlchemy()
-    d.init_app(app)
-    init_db()
+    db.init_app(app)
+    db.create_all()

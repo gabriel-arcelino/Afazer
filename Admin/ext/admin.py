@@ -25,4 +25,4 @@ def iniciar_app(app):
     admin.name = "admin"
     admin.template_mode = "bootstrap3"
     admin.init_app(app)
-    admin.add_view(UserAdmin(Usuario, db))
+    admin.add_view(UserAdmin(Usuario, db.session))

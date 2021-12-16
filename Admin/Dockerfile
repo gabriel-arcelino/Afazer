@@ -11,8 +11,7 @@ COPY Admin/ /service/Admin/
 COPY protobuf/ /service/protobuf/
 COPY Usuario/ /service/Usuario/
 WORKDIR /service/Admin
-RUN python -m pip install --upgrade pip
-RUN python -m pip install -r requirements.txt
+RUN python -m pip install --upgrade pip && python -m pip install -r requirements.txt
 #RUN mkdir /Usuario
 WORKDIR ../usuario
 RUN python -m grpc_tools.protoc -I ../protobuf --python_out=. --grpc_python_out=. ../protobuf/usuarios.proto
@@ -23,4 +22,4 @@ EXPOSE 50051
 
 #ENTRYPOINT [ "flask", "run"]
 ENTRYPOINT [ "python", "-m"]
-CMD ["Admin.usuarios"]
+CMD ["Admin.app"]
