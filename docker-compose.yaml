@@ -1,0 +1,73 @@
+version: "3.9"
+services:
+
+    database_usuarios:
+        container_name: usuarios
+        image: "postgres:latest"
+        env_file: database_usuarios.conf
+        ports:
+            - "5432:5432"
+        networks:
+            microservices:
+        volumes:
+            - db_volume_usuarios:/var/lib/postgresql
+    database_atividades:
+        container_name: atividades
+        image: "postgres:latest"
+        env_file: database_atividades.conf
+        ports:
+            - "5433:5432"
+        networks:
+            microservices:
+        volumes:
+            - db_volume_atividades:/var/lib/postgresql
+    admin:
+        container_name: admin
+        build:
+            context: .
+            dockerfile: Admin/Dockerfile
+        depends_on:
+            -   database_usuarios
+        restart: on-failure
+        image: "admin"
+        env_file: database_usuarios.conf
+        entrypoint: python -m Admin.usuarios
+        networks:
+            - microservices
+        ports:
+            - "5001:5001"
+
+    servidor_usuarios:
+        container_name: servidor_usuarios
+        build:
+            context: .
+            dockerfile: Admin/Dockerfile
+        image: "admin"
+        env_file: database_usuarios.conf
+        entrypoint: python -m Admin.usuarios
+        networks:
+            - microservices
+        ports:
+            -   "50051:50051"
+    afazer:
+        container_name: afazer
+        build:
+            context: .
+            dockerfile: afazer/Dockerfile
+        env_file: database_atividades.conf
+        environment:
+            ADMIN_HOST: admin
+        depends_on:
+            -   database_atividades
+        restart: on-failure
+        image: "afazer"
+        networks:
+            - microservices
+        ports:
+            - "5000:5000"
+
+networks:
+    microservices:
+volumes:
+    db_volume_usuarios:
+    db_volume_atividades:

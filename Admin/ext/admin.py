@@ -4,8 +4,8 @@ from flask_admin.contrib import sqla
 from flask_simplelogin import login_required
 from werkzeug.security import generate_password_hash
 
-from afazer.ext.db import db
-from afazer.models import Usuario, Atividade
+from Admin.ext.db import db
+from Admin.models import Usuario
 
 # Proteger o admin com login via Monkey Patch
 AdminIndexView._handle_view = login_required(AdminIndexView._handle_view)
@@ -14,7 +14,7 @@ admin = Admin()
 
 
 class UserAdmin(sqla.ModelView):
-    column_list = ['login', 'pessoa.nome', 'tipo_usuario']
+    column_list = ['login', 'nome', 'tipo_usuario']
     can_edit = True
 
     def on_model_change(self, form, model, is_created):
@@ -25,6 +25,4 @@ def iniciar_app(app):
     admin.name = "admin"
     admin.template_mode = "bootstrap3"
     admin.init_app(app)
-    admin.add_view(sqla.ModelView(Atividade, db))
-    # admin.add_view(sqla.ModelView(Pessoa, db))
-    admin.add_view(UserAdmin(Usuario, db))
+    admin.add_view(UserAdmin(Usuario, db.session))
