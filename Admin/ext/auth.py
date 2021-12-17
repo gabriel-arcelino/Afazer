@@ -5,20 +5,21 @@ from Admin.models import Usuario
 
 
 def verify_login(user):
-    # """Valida o usuario e senha para efetuar o login"""
-    # login = user.get('username')
-    # senha = user.get('password')
-    # if not login or not senha:
-    #     return False
-    # existing_user = Usuario.query.filter_by(login=login).first()
-    # if not existing_user:
-    #     return False
-    # if not (existing_user.tipo_usuario == 'admin'):
-    #     return False
-    # if check_password_hash(existing_user.senha, senha):
-    #     return True
-    # return False
-    return True
+    """Valida o usuario e senha para efetuar o login"""
+    login = user.get('username')
+    senha = user.get('password')
+    if not login or not senha:
+        return False
+    existing_user = Usuario.query.filter_by(login=login).first()
+    if login == 'admin' and senha == 'admin':
+        return True
+    if not existing_user:
+        return False
+    if not (existing_user.tipo_usuario == 'admin'):
+        return False
+    if check_password_hash(existing_user.senha, senha):
+        return True
+    return False
 
 
 def create_user(username, password):

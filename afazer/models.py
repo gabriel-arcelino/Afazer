@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from afazer.ext.db import db, Base
+from afazer.ext.db import db
 from flask_login import UserMixin
 
 
-class Atividade(Base):
+class Atividade(db.Model):
     __tablename__ = 'atividade'
     id = Column(Integer, primary_key=True)
     nome = Column(String(80), index=True)
@@ -23,7 +23,7 @@ class Atividade(Base):
         db.commit()
 
 
-class Usuario(Base, UserMixin):
+class Usuario(db.Model, UserMixin):
     __tablename__ = 'usuario'
     id = Column(Integer, primary_key=True)
     nome = Column(String(60))

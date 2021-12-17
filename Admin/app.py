@@ -27,6 +27,6 @@ if __name__ == '__main__':
     app.run(port=5001, host = '0.0.0.0', debug=True)
     print("teste")
     # , host = '0.0.0.0'
-    # eval $(cat database.conf | sed 's/^/export /')
+    # eval $(cat database_usuarios.conf | sed 's/^/export /')
 
     #ssl_context='adhoc',
