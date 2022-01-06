@@ -13,6 +13,6 @@ WORKDIR ../usuario
 RUN python -m grpc_tools.protoc -I ../protobuf --python_out=. --grpc_python_out=. ../protobuf/usuarios.proto
 WORKDIR ../afazer
 EXPOSE 50051
+EXPOSE 80
 ENV FLASK_APP=afazer.py
-
-ENTRYPOINT [ "flask", "run", "--host=0.0.0.0"]
+ENTRYPOINT [ "flask", "run", "--host=0.0.0.0", "--port=80"]

@@ -1,27 +1,20 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
-from Admin.ext.db import db
-from flask_login import UserMixin
+from sqlalchemy import Table, Column, String, Integer
+from servidor_usuarios.ext.db import metadata, Base, engine
+from sqlalchemy.orm import sessionmaker, Session
 
 
-class Usuario(db.Model, UserMixin):
-    __tablename__ = 'usuario'
+class Usuario(Base):
+    __tablename__ = Table("usuario", metadata)
     id = Column(Integer, primary_key=True)
     nome = Column(String(60))
     login = Column(String(30), unique=True)
     senha = Column(String(150))
     tipo_usuario = Column(String(20))
 
-    def __repr__(self):
-        return '<Usuario {}>'.format(self.login)
 
-    def save(self):
-        db.add(self)
-        db.commit()
+Session = sessionmaker(engine)
+sessao = Session()
 
-    def delete(self):
-        db.delete(self)
-        db.commit()
 
 
 

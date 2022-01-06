@@ -17,7 +17,6 @@ WORKDIR ../usuario
 RUN python -m grpc_tools.protoc -I ../protobuf --python_out=. --grpc_python_out=. ../protobuf/usuarios.proto
 CMD ["sed -i '1c import sys, os sys.path.append(os.path.dirname(os.path.abspath(__file__)))' usuarios_pb2.py"]
 WORKDIR ..
-EXPOSE 50051
 #ENV FLASK_APP=app.py
 
 #ENTRYPOINT [ "flask", "run"]

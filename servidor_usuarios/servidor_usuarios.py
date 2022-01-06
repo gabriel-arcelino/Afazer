@@ -1,4 +1,4 @@
-from Admin.models import Usuario
+from servidor_usuarios.models import Usuario, sessao
 from concurrent import futures
 import grpc, os
 
@@ -18,17 +18,19 @@ def iniciarServidor():
 
 
 class UsuarioServe(usuarios_pb2_grpc.UsuariosServicer):
+
     def RetornarUsuarios(self, requisicao, context):
         usuario = ""
         if requisicao.coluna == Coluna.LOGIN:
-            usuario = Usuario.query.filter_by(login=requisicao.valor)
+            usuario = sessao.query(Usuario).filter_by(login=requisicao.valor)
             print("user",usuario)
         elif requisicao.coluna == Coluna.ID:
-            usuario = Usuario.query.filter_by(id=requisicao.valor)
+            # session.query(User).filter(User.id==1).first()
+            usuario = sessao.query(Usuario).filter_by(id=requisicao.valor)
         elif requisicao.coluna == Coluna.NOME:
-            usuario = Usuario.query.filter_by(nome=requisicao.valor)
+            usuario = sessao.query(Usuario).filter_by(nome=requisicao.valor)
         elif requisicao.coluna == Coluna.TIPO_USUARIO:
-            usuario = Usuario.query.filter_by(tipo_usuario=requisicao.valor)
+            usuario = sessao.query(Usuario).filter_by(tipo_usuario=requisicao.valor)
             print(usuario)
 
         else:

@@ -19,6 +19,7 @@ def login():
         senha = request.form.get('senha')
         remember = True if request.form.get('remember') else False
         usuario = (cliente.RetornarUsuarios(Requisicao(coluna=Coluna.LOGIN, valor=email))).usuarios[0]
+        # usuario= Usuario(id=1, nome='Maria', login='maria@gmail.com',senha='pbkdf2:sha256:260000$22ArPFXpK3e8fq1a$5f10269563ca0d0ca68b37c08057ba43359b05b84d233f9b486a5a316d3efa98',tipo_usuario='gestor')
         usuario = Usuario(id=usuario.id, nome=usuario.nome, login=usuario.login, senha=usuario.senha, tipo_usuario=usuario.tipo_usuario)
         print("TESTE", usuario.id)
         if usuario is not None and check_password_hash(usuario.senha, senha):

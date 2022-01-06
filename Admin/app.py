@@ -11,7 +11,6 @@ from Usuario import usuarios_pb2_grpc
 from Admin import config
 
 
-
 app = Flask(__name__)
 app.config['TITLE'] = "Admin"
 app.config["SECRET_KEY"]="c00ee353-52d1-4819-9b12-9cd86db93401"

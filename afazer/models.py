@@ -15,12 +15,12 @@ class Atividade(db.Model):
         return '<Atividades {}>'.format(self.nome)
 
     def save(self):
-        db.add(self)
-        db.commit()
+        db.session.add(self)
+        db.session.commit()
 
     def delete(self):
-        db.delete(self)
-        db.commit()
+        db.session.delete(self)
+        db.session.commit()
 
 
 class Usuario(db.Model, UserMixin):

@@ -1,4 +1,10 @@
 import os
+# os.environ['POSTGRES_USER']='gabriel'
+# os.environ['POSTGRES_PASSWORD']='senha1'
+# os.environ['POSTGRES_HOST']='localhost'
+# os.environ['POSTGRES_PORT']='5432'
+# os.environ['POSTGRES_DB']='usuarios'
+
 
 user = os.environ['POSTGRES_USER']
 password = os.environ['POSTGRES_PASSWORD']
