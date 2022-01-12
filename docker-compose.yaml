@@ -1,26 +1,38 @@
-version: "3.9"
+version: "2.4"
 services:
 
     database_usuarios:
         container_name: usuarios
         image: "postgres:latest"
         env_file: database_usuarios.conf
+        cpuset : '0'
+        mem_limit: 2gb
         ports:
             - "5432:5432"
         networks:
             microservices:
         volumes:
             - db_volume_usuarios:/var/lib/postgresql
+
+        healthcheck:
+            test: "exit 0"
+
     database_atividades:
         container_name: atividades
         image: "postgres:latest"
         env_file: database_atividades.conf
+        cpuset : '0'
+        mem_limit: 2gb
         ports:
             - "5433:5432"
         networks:
             microservices:
         volumes:
             - db_volume_atividades:/var/lib/postgresql
+#        read_only: true
+        healthcheck:
+            test: "exit 0"
+
     proxy:
         container_name: nginx
         image: nginx:1.19.10-alpine
@@ -31,29 +43,30 @@ services:
             - ./proxy/conf/nginx.conf:/etc/nginx/nginx.conf
             - ./proxy/certificados:/etc/nginx/certs
         depends_on:
-            - afazer
-        restart: on-failure
+            afazer:
+                condition: service_healthy
+        cpuset : '0'
+        mem_limit: 2gb
         networks:
             - microservices
+
     admin:
         container_name: admin
         build:
             context: .
             dockerfile: Admin/Dockerfile
         depends_on:
-            -   database_usuarios
-        restart: on-failure
+            database_usuarios:
+                condition: service_healthy
         image: "admin"
         env_file: database_usuarios.conf
+        cpuset : '0'
+        mem_limit: 2gb
         networks:
             - microservices
         ports:
             - "5001:5001"
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.50'
-                    memory: 3000M
+
 
     servidor_usuarios:
         container_name: servidor_usuarios
@@ -62,18 +75,17 @@ services:
             dockerfile: servidor_usuarios/Dockerfile
         depends_on:
             - database_usuarios
-        restart: on-failure
         image: "servidor_usuarios"
         env_file: database_usuarios.conf
+        cpuset : '0'
+        mem_limit: 2gb
         networks:
             - microservices
         ports:
             -   "50051:50051"
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.50'
-                    memory: 3000M
+        healthcheck:
+            test: "exit 0"
+
     afazer:
         container_name: afazer
         build:
@@ -83,18 +95,20 @@ services:
         environment:
             ADMIN_HOST: servidor_usuarios
         depends_on:
-            -   database_atividades
-        restart: on-failure
+            database_atividades:
+                condition: service_healthy
+            servidor_usuarios:
+                condition: service_healthy
         image: "afazer"
+        cpus : 0.5
+        mem_limit: 2gb
+
         networks:
             - microservices
         ports:
             - "8080:80"
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.50'
-                    memory: 3000M
+        healthcheck:
+            test: "exit 0"
 
 
 networks:
